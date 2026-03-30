@@ -1,6 +1,6 @@
 # Top-level CMakeLists.txt
 cmake_minimum_required(VERSION 3.16)
-project(CLite)
+project(verbex)
 
 # Add subdirectories
 add_subdirectory(cmake)
