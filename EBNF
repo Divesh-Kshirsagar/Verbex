@@ -1,0 +1,91 @@
+// ============================================================================
+// Verbex Language Specification (EBNF Grammar)
+// Target: LLVM IR -> ARM Cortex-M0
+// ============================================================================
+
+<program> ::= <declaration_list>
+
+<declaration_list> ::= <declaration> { <declaration> }
+
+<declaration> ::= <variable_declaration> | <function_declaration>
+
+<variable_declaration> ::= "int" <identifier> "=" <expression> ";"
+                         | "int" <identifier> ";"
+
+<function_declaration> ::= "int" <identifier> "(" <params> ")" <compound_statement>
+                         | "void" <identifier> "(" <params> ")" <compound_statement>
+
+<params> ::= "void" | <param_list> | <empty>
+
+<param_list> ::= <param> { "," <param> }
+
+<param> ::= "int" <identifier>
+
+<compound_statement> ::= "{" <statement_list> "}"
+
+<statement_list> ::= { <statement> }
+
+<statement> ::= <variable_declaration>
+              | <expression_statement>
+              | <compound_statement>
+              | <selection_statement>
+              | <iteration_statement>
+              | <return_statement>
+              | <print_statement>
+
+<expression_statement> ::= [ <expression> ] ";"
+
+<selection_statement> ::= "if" "(" <expression> ")" <statement> [ "else" <statement> ]
+
+<iteration_statement> ::= "while" "(" <expression> ")" <statement>
+
+<return_statement> ::= "return" [ <expression> ] ";"
+
+<print_statement> ::= "print" <expression> ";"
+
+// --- Expressions (Ordered by Precedence) ---
+
+<expression> ::= <identifier> "=" <expression> 
+               | <logical_or_expression>
+
+<logical_or_expression> ::= <logical_and_expression> { "or" <logical_and_expression> }
+
+<logical_and_expression> ::= <equality_expression> { "and" <equality_expression> }
+
+<equality_expression> ::= <relational_expression> { <equality_operator> <relational_expression> }
+
+<equality_operator> ::= "==" | "!="
+
+<relational_expression> ::= <additive_expression> { <relational_operator> <additive_expression> }
+
+<relational_operator> ::= "<" | "<=" | ">" | ">="
+
+<additive_expression> ::= <term> { <additive_operator> <term> }
+
+<additive_operator> ::= "+" | "-"
+
+<term> ::= <unary_expression> { <multiplicative_operator> <unary_expression> }
+
+<multiplicative_operator> ::= "*" | "/"
+
+<unary_expression> ::= "not" <unary_expression>
+                     | "-" <unary_expression>
+                     | <factor>
+
+<factor> ::= "(" <expression> ")" 
+           | <identifier> 
+           | <number> 
+           | <function_call>
+
+<function_call> ::= <identifier> "(" <args> ")"
+
+<args> ::= <arg_list> | <empty>
+
+<arg_list> ::= <expression> { "," <expression> }
+
+// --- Lexical Tokens ---
+<identifier> ::= <letter> { <letter> | <digit> | "_" }
+<number>     ::= <digit> { <digit> }
+<letter>     ::= "a".."z" | "A".."Z"
+<digit>      ::= "0".."9"
+<empty>      ::=
