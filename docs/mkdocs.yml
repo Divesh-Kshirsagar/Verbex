@@ -1,1 +1,54 @@
-site_name: My Docs
+site_name: Rivet
+site_description: Rivet Language Documentation
+site_author: Divesh Sanjay Kshirsagar
+
+theme:
+  name: material
+
+nav:
+  - Home: index.md
+
+  - Getting Started:
+      - Installation: getting-started.md
+      - Hello World: getting-started.md
+
+  - Language Basics:
+      - Variables: basics/variables.md
+      - Control Flow: basics/control-flow.md
+      - Functions: basics/functions.md
+
+  - Core Features:
+      - Types: features/types.md
+      - Memory Model: features/memory.md
+      - Modules: features/modules.md
+
+  - Advanced:
+      - Performance: advanced/performance.md
+      - Low-level Features: advanced/low-level.md
+
+  - Standard Library: stdlib.md
+
+  - Reference:
+      - Syntax: reference/syntax.md
+      - Keywords: reference/keywords.md
+
+  - Examples: examples.md
+
+  - Tooling:
+      - CLI Usage: tooling.md
+
+  - Demo:
+      - Cortex-M0 Simulation: demo.md
+
+  - Internals:
+      - Overview: internals/overview.md
+      - LLVM Backend: internals/llvm.md
+
+markdown_extensions:
+  - toc:
+      permalink: true
+  - codehilite
+  - admonition
+
+plugins:
+  - search
