@@ -1,5 +1,9 @@
 # include <iostream>
 #include <string>
+#include <llvm/IR/BasicBlock.h>
+#include <llvm/IR/Constants.h>
+#include <llvm/IR/Function.h>
+#include <llvm/IR/Type.h>
 #include "Rivet/Lexer.h"
 #include "Rivet/Parser.h"
 #include "Rivet/CodeGen.h"
@@ -56,12 +60,32 @@ int main(int argc, char** argv) {
     CompilerState.Initialize();
     std::cout << "Rivet Compiler initialized.\n";
 
+    auto* Int32Ty = llvm::Type::getInt32Ty(*CompilerState.TheContext);
+    auto* EntryFnTy = llvm::FunctionType::get(Int32Ty, false);
+    auto* EntryFn = llvm::Function::Create(
+        EntryFnTy,
+        llvm::Function::ExternalLinkage,
+        "__rivet_entry",
+        CompilerState.TheModule.get());
+    auto* EntryBB = llvm::BasicBlock::Create(*CompilerState.TheContext, "entry", EntryFn);
+    CompilerState.Builder->SetInsertPoint(EntryBB);
+
+    llvm::Value* lastVal = llvm::ConstantInt::get(Int32Ty, 0, true);
+
     for (const auto& node : astNodes) {
         if(llvm::Value* val = node->codegen()) {
-            //successfully generated code for this node
+            lastVal = val;
         } else {
             std::cerr << "Error: Code generation failed for an AST node.\n";
             return 1;
+        }
+    }
+
+    if (!EntryBB->getTerminator()) {
+        if (lastVal && lastVal->getType()->isIntegerTy(32)) {
+            CompilerState.Builder->CreateRet(lastVal);
+        } else {
+            CompilerState.Builder->CreateRet(llvm::ConstantInt::get(Int32Ty, 0, true));
         }
     }
     
