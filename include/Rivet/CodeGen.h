@@ -5,6 +5,7 @@
 #include <llvm/IR/IRBuilder.h>
 #include <llvm/IR/Module.h>
 #include <memory>
+#include <map>
 
 namespace Rivet
 {
@@ -14,9 +15,11 @@ namespace Rivet
         std::unique_ptr<llvm::IRBuilder<>> Builder;
         std::unique_ptr<llvm::Module> TheModule;
 
+        std::map<std::string, llvm::AllocaInst *> NamedValues;
+
         void Initialize();
     };
-    
+
     // Expposes the global compiler state for codegen, which includes the LLVM context, IR builder, and module. This is used by the codegen methods of AST nodes to generate LLVM IR.
     extern CodeGenContext CompilerState;
 }

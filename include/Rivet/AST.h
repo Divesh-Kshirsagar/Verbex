@@ -14,7 +14,6 @@ namespace llvm
 
 namespace Rivet
 {
-    // TODO: Implement dump
     // TODO: Implement codegen
     class ASTNode
     {

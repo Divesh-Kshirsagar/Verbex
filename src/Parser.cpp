@@ -104,7 +104,6 @@ namespace Rivet
         return std::make_unique<IfAST>(std::move(Cond), std::move(Then), std::move(Else));
     }
 
-
     // Dummy implementations for now, to be filled in later
     // TODO: Replace temroary placeholder with actual parsing logic
     std::unique_ptr<ASTNode> Parser::ParseBlock()
@@ -117,7 +116,11 @@ namespace Rivet
 
         while (CurTok != '}' && CurTok != tok_eof)
         {
-            getNextToken();
+            auto Stmt = ParseStatement();
+            if (Stmt)
+            {
+                Statements.push_back(std::move(Stmt));
+            }
         }
 
         if (CurTok != '}')
@@ -127,15 +130,21 @@ namespace Rivet
         return std::make_unique<BlockAST>(std::move(Statements));
     }
 
-    // Dummy implementations for now, to be filled in later
-    // TODO: Replace temporary placeholder with actual parsing logic
     std::unique_ptr<ASTNode> Parser::ParseExpression()
     {
+        std::unique_ptr<ASTNode> LHS;
         if (CurTok == tok_number)
-            return ParseNumberExpr();
-        if (CurTok == tok_identifier)
-            return ParseIdentifierExpr();
-        return LogError("Unknown token when expecting an expression");
+            LHS = ParseNumberExpr();
+        else if (CurTok == tok_identifier)
+            LHS = ParseIdentifierExpr();
+        else if (CurTok == '(')
+            LHS = ParseParenExpr();
+        else
+            return LogError("Unknown token when expecting an expression");
+
+        if (!LHS)
+            return nullptr;
+        return ParseBinOpRHS(0, std::move(LHS));
     }
 
     std::vector<std::unique_ptr<ASTNode>> Parser::ParseFile()
@@ -161,7 +170,106 @@ namespace Rivet
             return ParseIfStatement();
         if (CurTok == '{')
             return ParseBlock();
-        return LogError("Unknown token when expecting a statement");    
+        if (CurTok == ';')
+        {
+            getNextToken();
+            return std::make_unique<BlockAST>(std::vector<std::unique_ptr<ASTNode>>{});
+        }
+
+        auto Expr = ParseExpression();
+        if (!Expr)
+            return nullptr;
+        if (CurTok != ';')
+            return LogErrorExpected("';'", "after expression");
+        getNextToken();
+        return Expr;
     }
 
+    std::unique_ptr<ASTNode> Parser::ParseParenExpr()
+    {
+        if (CurTok != '(')
+            return LogErrorExpected("'('", "to start expression");
+        getNextToken();
+        auto V = ParseExpression();
+        if (!V)
+            return nullptr;
+        if (CurTok != ')')
+            return LogErrorExpected("')'", "to end expression");
+        getNextToken();
+        return V;
+    }
+
+    int Parser::GetTokPrecedence()
+    {
+        if (CurTok < 0)
+        {
+            switch (CurTok)
+            {
+            case tok_eq:
+            case tok_neq:
+                return 10;
+            case tok_and:
+                return 5;
+            case tok_or:
+                return 4;
+            case tok_lsft:
+            case tok_rsft:
+                return 20;
+            default:
+                return -1;
+            }
+        }
+        else
+        {
+            switch (CurTok)
+            {
+            case '+':
+            case '-':
+                return 20;
+            case '*':
+            case '/':
+                return 40;
+            default:
+                return -1;
+            }
+        }
+    }
+
+    std::unique_ptr<ASTNode> Parser::ParseBinOpRHS(int ExprPrec, std::unique_ptr<ASTNode> LHS)
+    {
+        while (true)
+        {
+            int TokPrec = GetTokPrecedence();
+
+            if (TokPrec < ExprPrec)
+                return LHS;
+
+            int BinOp = CurTok;
+            getNextToken();
+
+            std::unique_ptr<ASTNode> RHS;
+
+            if (CurTok == tok_number)
+                RHS = ParseNumberExpr();
+            else if (CurTok == tok_identifier)
+                RHS = ParseIdentifierExpr();
+            else if (CurTok == '(')
+                RHS = ParseParenExpr();
+            else
+                return LogError("Unexpected token when parsing binary operator RHS");
+
+            if (!RHS)
+                return nullptr;
+
+            int NextPrec = GetTokPrecedence();
+            if (TokPrec < NextPrec)
+            {
+                RHS = ParseBinOpRHS(TokPrec + 1, std::move(RHS));
+                if (!RHS)
+                    return nullptr;
+            }
+
+            LHS = std::make_unique<BinaryOpAST>(BinOp, std::move(LHS), std::move(RHS));
+        }
+    }
 }
