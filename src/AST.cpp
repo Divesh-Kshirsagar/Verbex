@@ -1,6 +1,8 @@
 #include "Rivet/AST.h"
 #include "Rivet/Lexer.h"
+#include "Rivet/CodeGen.h"
 #include <iostream>
+#include <llvm/IR/Constant.h>
 
 namespace Rivet
 {
@@ -11,7 +13,7 @@ namespace Rivet
     }
     llvm::Value *NumberAST::codegen()
     {
-        return nullptr; // TODO: Implement codegen
+        return llvm::ConstantInt::get(*CompilerState.TheContext, llvm::APInt(32, Val, true));
     }
 
     void VariableAST::dump(int indent) const
