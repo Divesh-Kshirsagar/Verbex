@@ -4,6 +4,8 @@
 #include <iostream>
 #include <llvm/IR/Constant.h>
 
+
+// TODO: add a final terminator in all exit paths to make sure we don't have any basic blocks without terminators, which would cause LLVM to crash. --- IGNORE ---
 namespace Rivet
 {
     void NumberAST::dump(int indent) const
@@ -113,6 +115,35 @@ namespace Rivet
             return CompilerState.Builder->CreateZExt(CmpNE, llvm::Type::getInt32Ty(*CompilerState.TheContext), "booltmp");
         }
 
+        // relational
+        case '<':
+        {
+            llvm::Value *CmpLT = CompilerState.Builder->CreateICmpSLT(L, R, "lttmp");
+            return CompilerState.Builder->CreateZExt(CmpLT, llvm::Type::getInt32Ty(*CompilerState.TheContext), "booltmp");
+        }
+        case '>':
+        {
+            llvm::Value *CmpGT = CompilerState.Builder->CreateICmpSGT(L, R, "gttmp");
+            return CompilerState.Builder->CreateZExt(CmpGT, llvm::Type::getInt32Ty(*CompilerState.TheContext), "booltmp");
+        }
+        
+        // assignment
+        case '=':
+        {
+            auto *LHSE = dynamic_cast<VariableAST *>(LHS.get());
+            if(!LHSE){
+                std::cerr << "Left-hand side of assignment must be a variable." << std::endl;
+            }
+            llvm::AllocaInst *Alloca = CompilerState.NamedValues[LHSE->getName()];
+            if(!Alloca){
+                std::cerr << "Unknown variable name in assignment: " << LHSE->getName() << std::endl;
+                return nullptr;
+            }
+
+            CompilerState.Builder->CreateStore(R, Alloca);
+            return R;
+        }
+
         default:
             std::cerr << "Unknown binary operator: " << Op << std::endl;
             return nullptr;
@@ -141,7 +172,16 @@ namespace Rivet
     }
     llvm::Value *BlockAST::codegen()
     {
-        return nullptr; // TODO: Implement codegen
+        llvm::Value *LastVal = nullptr;
+        for(const auto &stmt : Statements){
+            LastVal = stmt->codegen();
+            if(!LastVal){
+                return nullptr;
+            }
+
+        }
+        if(LastVal) return LastVal;
+        return llvm::ConstantInt::get(*CompilerState.TheContext, llvm::APInt(32, 0, true));
     }
 
     void IfAST::dump(int indent) const
@@ -163,7 +203,41 @@ namespace Rivet
     }
     llvm::Value *IfAST::codegen()
     {
-        return nullptr; // TODO: Implement codegen
+        llvm::Value *CondV = Cond->codegen();
+        if(!CondV){
+            return nullptr;
+        }
+
+        llvm::Value *Zero = llvm::ConstantInt::get(*CompilerState.TheContext, llvm::APInt(32, 0, true));
+        llvm::Value *CondBool = CompilerState.Builder->CreateICmpNE(CondV, Zero, "ifcond");
+
+        llvm::Function *TheFunction = CompilerState.Builder->GetInsertBlock()->getParent();
+
+        llvm::BasicBlock *ThenBB = llvm::BasicBlock::Create(*CompilerState.TheContext, "then", TheFunction);
+        llvm::BasicBlock *ElseBB = llvm::BasicBlock::Create(*CompilerState.TheContext, "else", TheFunction);
+        llvm::BasicBlock *MergeBB = llvm::BasicBlock::Create(*CompilerState.TheContext, "ifcont", TheFunction);
+
+        CompilerState.Builder->CreateCondBr(CondBool, ThenBB, ElseBB);
+
+        CompilerState.Builder->SetInsertPoint(ThenBB);
+        llvm::Value *ThenV = Then->codegen();
+        if(!ThenV) return nullptr;
+        CompilerState.Builder->CreateBr(MergeBB);
+        ThenBB = CompilerState.Builder->GetInsertBlock();
+
+        CompilerState.Builder->SetInsertPoint(ElseBB);
+        llvm::Value *ElseV = nullptr;
+        if(Else){
+            ElseV = Else->codegen();
+            if(!ElseV) return nullptr;
+        }
+        CompilerState.Builder->CreateBr(MergeBB);
+        ElseBB = CompilerState.Builder->GetInsertBlock();
+
+        CompilerState.Builder->SetInsertPoint(MergeBB);
+
+        return llvm::ConstantInt::get(*CompilerState.TheContext, llvm::APInt(32, 0, true)); 
+
     }
 
     void WhileAST::dump(int indent) const
@@ -179,7 +253,29 @@ namespace Rivet
     }
     llvm::Value *WhileAST::codegen()
     {
-        return nullptr; // TODO: Implement codegen
+        llvm::Function *TheFunction = CompilerState.Builder->GetInsertBlock()->getParent();
+
+        llvm::BasicBlock *CondBB = llvm::BasicBlock::Create(*CompilerState.TheContext, "cond", TheFunction);
+        llvm::BasicBlock *LoopBB = llvm::BasicBlock::Create(*CompilerState.TheContext, "loop", TheFunction);
+        llvm::BasicBlock *AfterBB = llvm::BasicBlock::Create(*CompilerState.TheContext, "afterloop", TheFunction);
+
+        CompilerState.Builder->CreateBr(CondBB);
+        CompilerState.Builder->SetInsertPoint(CondBB);
+
+        llvm::Value *CondV = Cond->codegen();
+        if(!CondV) return nullptr;
+
+        llvm::Value *Zero=llvm::ConstantInt::get(*CompilerState.TheContext, llvm::APInt(32, 0, true));
+        llvm::Value *CondBool = CompilerState.Builder->CreateICmpNE(CondV, Zero, "loopcond");
+
+        CompilerState.Builder->CreateCondBr(CondBool, LoopBB, AfterBB);
+
+        CompilerState.Builder->SetInsertPoint(LoopBB);
+        llvm::Value *BodyV = Body->codegen();
+        if(!BodyV) return nullptr;
+        CompilerState.Builder->CreateBr(CondBB);
+        CompilerState.Builder->SetInsertPoint(AfterBB);
+        return llvm::ConstantInt::get(*CompilerState.TheContext, llvm::APInt(32, 0, true));
     }
 
     void CallAST::dump(int indent) const

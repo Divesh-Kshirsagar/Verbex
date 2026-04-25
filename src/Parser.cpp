@@ -104,6 +104,28 @@ namespace Rivet
         return std::make_unique<IfAST>(std::move(Cond), std::move(Then), std::move(Else));
     }
 
+    std::unique_ptr<ASTNode> Parser::ParseWhileStatement()
+    {
+        getNextToken();
+
+        if (CurTok != '(')
+            return LogErrorExpected("'('", "after 'while'");
+        getNextToken();
+
+        auto Cond = ParseExpression();
+        if (!Cond)
+            return nullptr;
+
+        if (CurTok != ')')
+            return LogErrorExpected("')'", "after condition");
+        getNextToken();
+        auto Body = ParseBlock();
+        if (!Body)
+            return nullptr;
+
+        return std::make_unique<WhileAST>(std::move(Cond), std::move(Body));
+    }
+
     // Dummy implementations for now, to be filled in later
     // TODO: Replace temroary placeholder with actual parsing logic
     std::unique_ptr<ASTNode> Parser::ParseBlock()
@@ -174,6 +196,8 @@ namespace Rivet
             return ParseVariableDeclaration();
         if (CurTok == tok_if)
             return ParseIfStatement();
+        if (CurTok == tok_while)  
+            return ParseWhileStatement();
         if (CurTok == '{')
             return ParseBlock();
         if (CurTok == ';')
@@ -229,6 +253,11 @@ namespace Rivet
         {
             switch (CurTok)
             {
+            case '=':
+                return 2;
+            case '<':
+            case '>':
+                return 15;
             case '+':
             case '-':
                 return 20;
