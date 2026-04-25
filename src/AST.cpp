@@ -5,7 +5,6 @@
 #include <llvm/IR/Constant.h>
 
 
-// TODO: add a final terminator in all exit paths to make sure we don't have any basic blocks without terminators, which would cause LLVM to crash. --- IGNORE ---
 namespace Rivet
 {
     void NumberAST::dump(int indent) const
@@ -133,6 +132,7 @@ namespace Rivet
             auto *LHSE = dynamic_cast<VariableAST *>(LHS.get());
             if(!LHSE){
                 std::cerr << "Left-hand side of assignment must be a variable." << std::endl;
+                return nullptr;
             }
             llvm::AllocaInst *Alloca = CompilerState.NamedValues[LHSE->getName()];
             if(!Alloca){

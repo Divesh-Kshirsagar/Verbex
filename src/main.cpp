@@ -81,7 +81,7 @@ int main(int argc, char** argv) {
         }
     }
 
-    if (!EntryBB->getTerminator()) {
+    if (!CompilerState.Builder->GetInsertBlock()->getTerminator()) {
         if (lastVal && lastVal->getType()->isIntegerTy(32)) {
             CompilerState.Builder->CreateRet(lastVal);
         } else {
