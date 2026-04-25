@@ -121,6 +121,10 @@ namespace Rivet
             {
                 Statements.push_back(std::move(Stmt));
             }
+            else
+            {
+                getNextToken();
+            }
         }
 
         if (CurTok != '}')
@@ -166,6 +170,8 @@ namespace Rivet
 
     std::unique_ptr<ASTNode> Parser::ParseStatement()
     {
+        if (CurTok == tok_int)
+            return ParseVariableDeclaration();
         if (CurTok == tok_if)
             return ParseIfStatement();
         if (CurTok == '{')
@@ -271,5 +277,31 @@ namespace Rivet
 
             LHS = std::make_unique<BinaryOpAST>(BinOp, std::move(LHS), std::move(RHS));
         }
+    }
+
+    std::unique_ptr<ASTNode> Parser::ParseVariableDeclaration()
+    {
+        if (CurTok != tok_int)
+            return LogErrorExpected("int", "to start variable declaration");
+        std::string typeStr;
+        getNextToken();
+
+        if (CurTok != tok_identifier)
+            return LogErrorExpected("identifier", "after type in variable declaration");
+        std::string varName = lexer.IdentifierStr;
+        getNextToken();
+
+        std::unique_ptr<ASTNode> initVal = nullptr;
+        if (CurTok == '=')
+        {
+            getNextToken();
+            initVal = ParseExpression();
+            if (!initVal)
+                return nullptr;
+        }
+        if (CurTok != ';')
+            return LogErrorExpected("';'", "after variable declaration");
+        getNextToken();
+        return std::make_unique<VariableDeclAST>("int", varName, std::move(initVal));
     }
 }
