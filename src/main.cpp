@@ -2,6 +2,7 @@
 #include <string>
 #include "Rivet/Lexer.h"
 #include "Rivet/Parser.h"
+#include "Rivet/CodeGen.h"
 
 using namespace Rivet;
 
@@ -51,8 +52,24 @@ int main(int argc, char** argv) {
         std::cerr << "Compilation failed with " << parser.ErrorCount << " error(s).\n";
         return 1;
     }
-    std::cout << "Frontend Validation Complete.\n";
-    std::cout << "Note: Code generation not implemented yet.\n";
+
+    CompilerState.Initialize();
+    std::cout << "Rivet Compiler initialized.\n";
+
+    for (const auto& node : astNodes) {
+        if(llvm::Value* val = node->codegen()) {
+            //successfully generated code for this node
+        } else {
+            std::cerr << "Error: Code generation failed for an AST node.\n";
+            return 1;
+        }
+    }
     
+
+    std::cout << "============================\n";
+    std::cout << "           LLVM IR          \n";
+    std::cout << "============================\n";
+    CompilerState.TheModule->print(llvm::outs(), nullptr);
+    std::cout << "============================\n";
     return 0;
 }
