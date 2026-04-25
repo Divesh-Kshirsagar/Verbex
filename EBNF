@@ -1,6 +1,6 @@
 // ============================================================================
-// Verbex Language Specification (EBNF Grammar)
-// Target: LLVM IR -> ARM Cortex-M0
+// Rivet Language Specification (Final EBNF Grammar)
+// Target: LLVM IR -> ARM Cortex-M0 (Bare-Metal)
 // ============================================================================
 
 <program> ::= <declaration_list>
@@ -9,18 +9,22 @@
 
 <declaration> ::= <variable_declaration> | <function_declaration>
 
-<variable_declaration> ::= "int" <identifier> "=" <expression> ";"
-                         | "int" <identifier> ";"
+// --- Types & Variables ---
+<type_specifier> ::= "int" | "int" "ref" | "void"
 
-<function_declaration> ::= "int" <identifier> "(" <params> ")" <compound_statement>
-                         | "void" <identifier> "(" <params> ")" <compound_statement>
+<variable_declaration> ::= <type_specifier> <identifier> "=" <expression> ";"
+                         | <type_specifier> <identifier> ";"
+
+// --- Functions ---
+<function_declaration> ::= <type_specifier> <identifier> "(" <params> ")" <compound_statement>
 
 <params> ::= "void" | <param_list> | <empty>
 
 <param_list> ::= <param> { "," <param> }
 
-<param> ::= "int" <identifier>
+<param> ::= <type_specifier> <identifier>
 
+// --- Statements ---
 <compound_statement> ::= "{" <statement_list> "}"
 
 <statement_list> ::= { <statement> }
@@ -31,7 +35,6 @@
               | <selection_statement>
               | <iteration_statement>
               | <return_statement>
-              | <print_statement>
 
 <expression_statement> ::= [ <expression> ] ";"
 
@@ -41,12 +44,13 @@
 
 <return_statement> ::= "return" [ <expression> ] ";"
 
-<print_statement> ::= "print" <expression> ";"
-
 // --- Expressions (Ordered by Precedence) ---
 
-<expression> ::= <identifier> "=" <expression> 
+<expression> ::= <assignment_target> "=" <expression> 
                | <logical_or_expression>
+
+<assignment_target> ::= <identifier> 
+                      | "deref" <identifier>
 
 <logical_or_expression> ::= <logical_and_expression> { "or" <logical_and_expression> }
 
@@ -56,9 +60,13 @@
 
 <equality_operator> ::= "==" | "!="
 
-<relational_expression> ::= <additive_expression> { <relational_operator> <additive_expression> }
+<relational_expression> ::= <shift_expression> { <relational_operator> <shift_expression> }
 
 <relational_operator> ::= "<" | "<=" | ">" | ">="
+
+<shift_expression> ::= <additive_expression> { <shift_operator> <additive_expression> }
+
+<shift_operator> ::= "lsft" | "rsft"
 
 <additive_expression> ::= <term> { <additive_operator> <term> }
 
@@ -66,10 +74,12 @@
 
 <term> ::= <unary_expression> { <multiplicative_operator> <unary_expression> }
 
-<multiplicative_operator> ::= "*" | "/"
+<multiplicative_operator> ::= "*" | "/" | "%"
 
 <unary_expression> ::= "not" <unary_expression>
                      | "-" <unary_expression>
+                     | "address_of" <identifier>
+                     | "deref" <identifier>
                      | <factor>
 
 <factor> ::= "(" <expression> ")" 
@@ -88,4 +98,8 @@
 <number>     ::= <digit> { <digit> }
 <letter>     ::= "a".."z" | "A".."Z"
 <digit>      ::= "0".."9"
-<empty>      ::=
+<empty>      ::= 
+
+// --- Comments (Ignored by Lexer) ---
+<line_comment> ::= "//" { <any_character_except_newline> } <newline>
+<block_comment> ::= "/*" { <any_character> } "*/"
