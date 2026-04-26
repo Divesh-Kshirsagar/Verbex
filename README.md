@@ -28,6 +28,27 @@ To abstract Memory-Mapped I/O (MMIO), Rivet natively supports the following proc
 * `read_pin(pin)`
 * `delay_cycles(cycles)`
 
+## Module Imports
+Rivet supports module imports using the `import` statement.
+
+### Syntax
+```rivet
+import math;
+import gpio;
+```
+
+### Resolution behavior
+An import is resolved by module name to a source file at:
+
+* `lib/<module_name>.rvt`
+
+Examples:
+
+* `import math;` -> `lib/math.rvt`
+* `import board;` -> `lib/board.rvt`
+
+Duplicate imports are ignored after the first successful import.
+
 ## Lexical Tokens & Keywords
 Rivet minimizes cryptic symbols. Keywords return negative integer token values (to avoid collision), while standard symbols return their native ASCII integer equivalents.
 
@@ -59,6 +80,7 @@ Rivet minimizes cryptic symbols. Keywords return negative integer token values (
 | `while` | -32 | Pre-condition loop |
 | `fun` | -33 | Function declaration |
 | `return`| -34 | Return from execution |
+| `import`| -35 | Import Libraries|
 
 ## Example: Agentic Hardware Implementation
 
