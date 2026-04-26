@@ -67,6 +67,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#internals-overview" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -1101,6 +1106,26 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
         
@@ -1118,6 +1143,119 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#high-level-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        High-Level Architecture
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lexer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lexer
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parser" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parser
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parser">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#statement-entry-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Statement entry points
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#expression-parsing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Expression parsing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#import-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Import flow
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ast-layer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AST Layer
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#driver-main" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Driver (main)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -1176,6 +1314,110 @@
   
   
   
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#high-level-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        High-Level Architecture
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lexer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lexer
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parser" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parser
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parser">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#statement-entry-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Statement entry points
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#expression-parsing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Expression parsing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#import-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Import flow
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ast-layer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AST Layer
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#driver-main" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Driver (main)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -1192,9 +1434,80 @@
 
 
 
-  <h1>Overview</h1>
-
-
+<h1 id="internals-overview">Internals Overview<a class="headerlink" href="#internals-overview" title="Permanent link">&para;</a></h1>
+<p>This page documents the actual compiler pipeline as implemented in this repository.</p>
+<h2 id="high-level-architecture">High-Level Architecture<a class="headerlink" href="#high-level-architecture" title="Permanent link">&para;</a></h2>
+<p>Rivet currently uses a classic front-end + LLVM IR backend design:</p>
+<ol>
+<li><strong>Lexer</strong> (<code>src/Lexer.cpp</code>)</li>
+<li><strong>Parser</strong> (<code>src/Parser.cpp</code>)</li>
+<li><strong>AST</strong> (<code>include/Rivet/AST.h</code>, <code>src/AST.cpp</code>)</li>
+<li><strong>Codegen Context</strong> (<code>include/Rivet/CodeGen.h</code>, <code>src/CodeGen.cpp</code>)</li>
+<li><strong>Driver</strong> (<code>src/main.cpp</code>)</li>
+</ol>
+<h2 id="lexer">Lexer<a class="headerlink" href="#lexer" title="Permanent link">&para;</a></h2>
+<p>The lexer reads a file stream and returns integer tokens.</p>
+<ul>
+<li>Keywords are negative enum values (for example <code>tok_if</code>, <code>tok_import</code>).</li>
+<li>Punctuation/operators such as <code>+</code>, <code>=</code>, <code>&lt;</code>, <code>(</code> are returned as ASCII values.</li>
+<li>Supports line comments <code>// ...</code>.</li>
+<li>Tracks <code>CurrentLine</code> and <code>CurrentColumn</code> for diagnostics.</li>
+</ul>
+<h2 id="parser">Parser<a class="headerlink" href="#parser" title="Permanent link">&para;</a></h2>
+<p>Parser is recursive descent with operator-precedence parsing for binary expressions.</p>
+<h3 id="statement-entry-points">Statement entry points<a class="headerlink" href="#statement-entry-points" title="Permanent link">&para;</a></h3>
+<p>Current statement parsing includes:</p>
+<ul>
+<li><code>import &lt;id&gt;;</code></li>
+<li>variable declarations (<code>int ...</code>)</li>
+<li><code>if (...) { ... } [else { ... }]</code></li>
+<li><code>while (...) { ... }</code></li>
+<li>blocks <code>{ ... }</code></li>
+<li>expression statements</li>
+<li>empty statement <code>;</code></li>
+</ul>
+<h3 id="expression-parsing">Expression parsing<a class="headerlink" href="#expression-parsing" title="Permanent link">&para;</a></h3>
+<ul>
+<li>primary: number, identifier/call, parenthesized expression</li>
+<li>binary RHS parser (<code>ParseBinOpRHS</code>) with precedence table</li>
+</ul>
+<h3 id="import-flow">Import flow<a class="headerlink" href="#import-flow" title="Permanent link">&para;</a></h3>
+<p><code>ParseImport</code> parses module name, avoids duplicate imports, and recursively parses imported source file into an <code>ImportAST</code> node.</p>
+<p>Path strategy currently:</p>
+<ol>
+<li><code>lib/&lt;module&gt;.rvt</code></li>
+<li>fallback <code>../lib/&lt;module&gt;.rvt</code></li>
+</ol>
+<h2 id="ast-layer">AST Layer<a class="headerlink" href="#ast-layer" title="Permanent link">&para;</a></h2>
+<p>Main nodes currently present:</p>
+<ul>
+<li><code>NumberAST</code></li>
+<li><code>VariableAST</code></li>
+<li><code>VariableDeclAST</code></li>
+<li><code>BinaryOpAST</code></li>
+<li><code>BlockAST</code></li>
+<li><code>IfAST</code></li>
+<li><code>WhileAST</code></li>
+<li><code>CallAST</code></li>
+<li><code>ImportAST</code></li>
+</ul>
+<p>Each node provides:</p>
+<ul>
+<li><code>dump()</code> for debug tree output</li>
+<li><code>codegen()</code> for LLVM generation</li>
+</ul>
+<h2 id="driver-main">Driver (<code>main</code>)<a class="headerlink" href="#driver-main" title="Permanent link">&para;</a></h2>
+<p>The driver:</p>
+<ol>
+<li>Loads source file.</li>
+<li>Parses to top-level AST node list.</li>
+<li>Optionally dumps AST.</li>
+<li>Creates LLVM module context.</li>
+<li>Builds synthetic entry function <code>__rivet_entry</code>.</li>
+<li>Codegens each top-level node.</li>
+<li>Emits <code>ret</code> if current block has no terminator.</li>
+<li>Prints full LLVM IR.</li>
+</ol>
 
 
 

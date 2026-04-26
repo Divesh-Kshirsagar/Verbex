@@ -67,6 +67,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#variables" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -387,6 +392,26 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Variables
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
         
@@ -404,6 +429,108 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#declaration-forms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Declaration Forms
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Declaration Forms">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Notes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#assignment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Assignment
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reading-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reading Variables
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scope-model-current" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scope Model (Current)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#supported-expression-operators-with-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Supported Expression Operators with Variables
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -1176,6 +1303,99 @@
   
   
   
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#declaration-forms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Declaration Forms
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Declaration Forms">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Notes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#assignment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Assignment
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reading-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reading Variables
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scope-model-current" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scope Model (Current)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#supported-expression-operators-with-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Supported Expression Operators with Variables
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -1192,9 +1412,57 @@
 
 
 
-  <h1>Variables</h1>
+<h1 id="variables">Variables<a class="headerlink" href="#variables" title="Permanent link">&para;</a></h1>
+<p>This page describes variable behavior in the current Rivet implementation.</p>
+<h2 id="declaration-forms">Declaration Forms<a class="headerlink" href="#declaration-forms" title="Permanent link">&para;</a></h2>
+<p>Rivet currently supports <code>int</code> variables with two forms:</p>
+<div class="codehilite"><pre><span></span><code>int x;
+int y = 42;
+</code></pre></div>
 
+<h3 id="notes">Notes<a class="headerlink" href="#notes" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>int x;</code> is valid and defaults to <code>0</code> during codegen.</li>
+<li><code>int y = &lt;expression&gt;;</code> evaluates the expression and stores the result.</li>
+<li>Declarations must end with <code>;</code>.</li>
+</ul>
+<h2 id="assignment">Assignment<a class="headerlink" href="#assignment" title="Permanent link">&para;</a></h2>
+<p>Assignment works as a binary expression with <code>=</code>:</p>
+<div class="codehilite"><pre><span></span><code>int i = 0;
+i = i + 1;
+</code></pre></div>
 
+<p>Current rule: the left-hand side must be a declared variable.
+If the left side is not a variable node, codegen reports an error.</p>
+<h2 id="reading-variables">Reading Variables<a class="headerlink" href="#reading-variables" title="Permanent link">&para;</a></h2>
+<p>Using a variable in an expression generates a load from its stack slot:</p>
+<div class="codehilite"><pre><span></span><code>int a = 7;
+int b = 3;
+a + b;
+</code></pre></div>
+
+<h2 id="scope-model-current">Scope Model (Current)<a class="headerlink" href="#scope-model-current" title="Permanent link">&para;</a></h2>
+<p>Variables are stored in a shared name map for codegen.
+Practical implication in the current prototype:</p>
+<ul>
+<li>Redeclaration and shadowing rules are not fully formalized yet.</li>
+<li>Keep names unique in small programs to avoid confusion.</li>
+</ul>
+<h2 id="supported-expression-operators-with-variables">Supported Expression Operators with Variables<a class="headerlink" href="#supported-expression-operators-with-variables" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Arithmetic: <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code></li>
+<li>Equality: <code>==</code>, <code>!=</code></li>
+<li>Relational: <code>&lt;</code>, <code>&gt;</code></li>
+<li>Keyword logical/bitwise: <code>and</code>, <code>or</code>, <code>lsft</code>, <code>rsft</code></li>
+</ul>
+<h2 id="example">Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span><code>int x = 10;
+int y = 2;
+
+x = x + y;
+x = x lsft 1;
+x;
+</code></pre></div>
 
 
 

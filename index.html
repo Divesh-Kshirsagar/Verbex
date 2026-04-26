@@ -65,6 +65,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#rivet-language-docs" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -199,6 +204,26 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
       
       <a href="." class="md-nav__link md-nav__link--active">
         
@@ -216,6 +241,80 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-rivet-currently-supports" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Rivet Currently Supports
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-partially-implemented-or-planned" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Is Partially Implemented or Planned
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#typical-compile-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Typical Compile Flow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Example
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reading-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reading Guide
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -1172,6 +1271,71 @@
   
   
   
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-rivet-currently-supports" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Rivet Currently Supports
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-partially-implemented-or-planned" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Is Partially Implemented or Planned
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#typical-compile-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Typical Compile Flow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Example
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reading-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reading Guide
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -1188,9 +1352,64 @@
 
 
 
-  <h1>Home</h1>
+<h1 id="rivet-language-docs">Rivet Language Docs<a class="headerlink" href="#rivet-language-docs" title="Permanent link">&para;</a></h1>
+<p>Rivet is a small, LLVM-backed systems language prototype focused on readable syntax and explicit control.
+These docs describe the current implementation in this repository so you can quickly understand what works today.</p>
+<h2 id="what-rivet-currently-supports">What Rivet Currently Supports<a class="headerlink" href="#what-rivet-currently-supports" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Integer literals and integer variables (<code>int</code>)</li>
+<li>Variable declarations with optional initialization</li>
+<li>Expression statements (for example, <code>a + b;</code>)</li>
+<li>Arithmetic operators: <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code></li>
+<li>Comparisons: <code>==</code>, <code>!=</code>, <code>&lt;</code>, <code>&gt;</code></li>
+<li>Bitwise/logical keyword operators: <code>and</code>, <code>or</code>, <code>lsft</code>, <code>rsft</code></li>
+<li>Assignment with <code>=</code> to declared variables</li>
+<li><code>if</code> / <code>else</code> blocks</li>
+<li><code>while</code> loops</li>
+<li>Function-call expressions (<code>name(arg1, arg2)</code>)</li>
+<li>Module imports with <code>import module_name;</code></li>
+<li>LLVM IR generation to a synthetic entry function <code>__rivet_entry</code></li>
+</ul>
+<h2 id="what-is-partially-implemented-or-planned">What Is Partially Implemented or Planned<a class="headerlink" href="#what-is-partially-implemented-or-planned" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>fun</code> and <code>return</code> tokens exist in the lexer, but function declaration parsing is not part of the current parser flow.</li>
+<li>Unary expression codegen is not implemented.</li>
+<li>Arrays are not implemented yet.</li>
+<li>Import resolution currently tries:<ul>
+<li><code>lib/&lt;module&gt;.rvt</code></li>
+<li><code>../lib/&lt;module&gt;.rvt</code> (fallback for build-directory execution)</li>
+</ul>
+</li>
+</ul>
+<h2 id="typical-compile-flow">Typical Compile Flow<a class="headerlink" href="#typical-compile-flow" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>Lexing</strong>: source file is tokenized with line/column tracking.</li>
+<li><strong>Parsing</strong>: recursive-descent parser builds AST nodes.</li>
+<li><strong>AST dump (optional)</strong>: run with <code>--dump-ast</code> to inspect parse output.</li>
+<li><strong>Codegen</strong>: AST emits LLVM IR into module <code>Rivet Bare Metal Module</code>.</li>
+<li><strong>IR print</strong>: module is printed to stdout.</li>
+</ol>
+<h2 id="quick-example">Quick Example<a class="headerlink" href="#quick-example" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">dummy</span><span class="p">;</span>
 
+<span class="nb">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
 
+<span class="n">i</span> <span class="o">+</span> <span class="n">imported_x</span><span class="p">;</span>
+</code></pre></div>
+
+<p>Run from <code>build/</code>:</p>
+<div class="codehilite"><pre><span></span><code>./rivet<span class="w"> </span>../tests/import_dummy_test.rvt<span class="w"> </span>--dump-ast
+</code></pre></div>
+
+<h2 id="reading-guide">Reading Guide<a class="headerlink" href="#reading-guide" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Start with <strong>Language Basics</strong> for day-to-day syntax.</li>
+<li>Use <strong>Reference</strong> for compact grammar and keyword tables.</li>
+<li>Use <strong>Internals</strong> to understand parser and LLVM backend behavior.</li>
+</ul>
 
 
 

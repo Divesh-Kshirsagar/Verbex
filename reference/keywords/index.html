@@ -67,6 +67,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#keywords-and-tokens" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -828,6 +833,26 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Keywords
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
         
@@ -845,6 +870,80 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#dynamic-tokens" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dynamic Tokens
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#types-and-memory-keywords" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Types and Memory Keywords
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#logical-and-bitwise-keywords" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logical and Bitwise Keywords
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#controlmodule-keywords" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Control/Module Keywords
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ascii-operator-tokens" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ASCII Operator Tokens
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -1176,6 +1275,71 @@
   
   
   
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#dynamic-tokens" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dynamic Tokens
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#types-and-memory-keywords" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Types and Memory Keywords
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#logical-and-bitwise-keywords" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logical and Bitwise Keywords
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#controlmodule-keywords" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Control/Module Keywords
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ascii-operator-tokens" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ASCII Operator Tokens
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -1192,9 +1356,170 @@
 
 
 
-  <h1>Keywords</h1>
-
-
+<h1 id="keywords-and-tokens">Keywords and Tokens<a class="headerlink" href="#keywords-and-tokens" title="Permanent link">&para;</a></h1>
+<p>Rivet uses negative integer token values for language keywords and dynamic token categories.
+Single-character punctuation/operators are returned as ASCII integer values.</p>
+<h2 id="dynamic-tokens">Dynamic Tokens<a class="headerlink" href="#dynamic-tokens" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th style="text-align: right;">Token Value</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>identifier</code></td>
+<td style="text-align: right;"><code>-2</code></td>
+<td>Variable/function/module names</td>
+</tr>
+<tr>
+<td><code>number</code></td>
+<td style="text-align: right;"><code>-3</code></td>
+<td>Integer literal</td>
+</tr>
+</tbody>
+</table>
+<h2 id="types-and-memory-keywords">Types and Memory Keywords<a class="headerlink" href="#types-and-memory-keywords" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Keyword</th>
+<th style="text-align: right;">Token Value</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>int</code></td>
+<td style="text-align: right;"><code>-10</code></td>
+<td>Implemented</td>
+</tr>
+<tr>
+<td><code>void</code></td>
+<td style="text-align: right;"><code>-11</code></td>
+<td>Tokenized; parser integration limited</td>
+</tr>
+<tr>
+<td><code>ref</code></td>
+<td style="text-align: right;"><code>-12</code></td>
+<td>Tokenized; parser integration limited</td>
+</tr>
+<tr>
+<td><code>address_of</code></td>
+<td style="text-align: right;"><code>-13</code></td>
+<td>Tokenized; parser integration limited</td>
+</tr>
+<tr>
+<td><code>deref</code></td>
+<td style="text-align: right;"><code>-14</code></td>
+<td>Tokenized; parser integration limited</td>
+</tr>
+</tbody>
+</table>
+<h2 id="logical-and-bitwise-keywords">Logical and Bitwise Keywords<a class="headerlink" href="#logical-and-bitwise-keywords" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Keyword</th>
+<th style="text-align: right;">Token Value</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>and</code></td>
+<td style="text-align: right;"><code>-20</code></td>
+<td>Parsed as binary operator</td>
+</tr>
+<tr>
+<td><code>or</code></td>
+<td style="text-align: right;"><code>-21</code></td>
+<td>Parsed as binary operator</td>
+</tr>
+<tr>
+<td><code>not</code></td>
+<td style="text-align: right;"><code>-22</code></td>
+<td>Token exists; unary path not fully wired in codegen</td>
+</tr>
+<tr>
+<td><code>lsft</code></td>
+<td style="text-align: right;"><code>-23</code></td>
+<td>Parsed as shift-left-like operator</td>
+</tr>
+<tr>
+<td><code>rsft</code></td>
+<td style="text-align: right;"><code>-24</code></td>
+<td>Parsed as arithmetic shift-right-like operator</td>
+</tr>
+<tr>
+<td><code>==</code></td>
+<td style="text-align: right;"><code>-25</code></td>
+<td>Equality compare</td>
+</tr>
+<tr>
+<td><code>!=</code></td>
+<td style="text-align: right;"><code>-26</code></td>
+<td>Not-equal compare</td>
+</tr>
+</tbody>
+</table>
+<h2 id="controlmodule-keywords">Control/Module Keywords<a class="headerlink" href="#controlmodule-keywords" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Keyword</th>
+<th style="text-align: right;">Token Value</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>if</code></td>
+<td style="text-align: right;"><code>-30</code></td>
+<td>Implemented</td>
+</tr>
+<tr>
+<td><code>else</code></td>
+<td style="text-align: right;"><code>-31</code></td>
+<td>Implemented</td>
+</tr>
+<tr>
+<td><code>while</code></td>
+<td style="text-align: right;"><code>-32</code></td>
+<td>Implemented</td>
+</tr>
+<tr>
+<td><code>fun</code></td>
+<td style="text-align: right;"><code>-33</code></td>
+<td>Tokenized; full function-declaration flow is in progress</td>
+</tr>
+<tr>
+<td><code>return</code></td>
+<td style="text-align: right;"><code>-34</code></td>
+<td>Tokenized; return statement flow is in progress</td>
+</tr>
+<tr>
+<td><code>import</code></td>
+<td style="text-align: right;"><code>-35</code></td>
+<td>Implemented</td>
+</tr>
+</tbody>
+</table>
+<h2 id="ascii-operator-tokens">ASCII Operator Tokens<a class="headerlink" href="#ascii-operator-tokens" title="Permanent link">&para;</a></h2>
+<p>These are returned directly as character code values by the lexer:</p>
+<ul>
+<li><code>=</code> (<code>61</code>)</li>
+<li><code>&lt;</code> (<code>60</code>)</li>
+<li><code>&gt;</code> (<code>62</code>)</li>
+<li><code>+</code> (<code>43</code>)</li>
+<li><code>-</code> (<code>45</code>)</li>
+<li><code>*</code> (<code>42</code>)</li>
+<li><code>/</code> (<code>47</code>)</li>
+<li><code>(</code>, <code>)</code>, <code>{</code>, <code>}</code>, <code>,</code>, <code>;</code></li>
+</ul>
+<p>This is why AST debug output may show numbers like <code>43</code> for <code>+</code> and <code>61</code> for <code>=</code>.</p>
 
 
 
