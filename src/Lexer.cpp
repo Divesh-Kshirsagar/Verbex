@@ -56,7 +56,7 @@ namespace Rivet
             {
                 advanceChar();
             }
-            if (LastChar != EOF)
+            if (!inputFile.eof())
             {
                 return gettok();
             }
