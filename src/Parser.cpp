@@ -33,7 +33,7 @@ namespace Rivet
     {
         auto result = std::make_unique<NumberAST>(lexer.NumVal);
         getNextToken();
-        return std::move(result);
+        return result;
     }
 
     std::unique_ptr<ASTNode> Parser::ParseIdentifierExpr()
@@ -315,7 +315,6 @@ namespace Rivet
     {
         if (CurTok != tok_int)
             return LogErrorExpected("int", "to start variable declaration");
-        std::string typeStr;
         getNextToken();
 
         if (CurTok != tok_identifier)

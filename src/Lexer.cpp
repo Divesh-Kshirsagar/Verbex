@@ -52,7 +52,7 @@ namespace Rivet
         if (LastChar == '/' && inputFile.peek() == '/')
         {
             advanceChar();
-            while (LastChar != '\n' && LastChar != '\r' && LastChar != 'EOF')
+            while (LastChar != '\n' && LastChar != '\r' && !inputFile.eof())
             {
                 advanceChar();
             }
