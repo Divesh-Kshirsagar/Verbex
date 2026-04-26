@@ -132,6 +132,17 @@ namespace Rivet
         void dump(int indent = 0) const override;
     };
 
+    class ImportAST : public ASTNode
+    {
+        std::string ModuleName;
+        std::vector<std::unique_ptr<ASTNode>> ImportedNodes;
+
+    public:
+        ImportAST(const std::string &ModuleName, std::vector<std::unique_ptr<ASTNode>> ImportedNodes)
+            : ModuleName(ModuleName), ImportedNodes(std::move(ImportedNodes)) {}
+        llvm::Value *codegen() override;
+        void dump(int indent = 0) const override;
+    };
 }
 
 #endif

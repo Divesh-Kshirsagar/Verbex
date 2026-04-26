@@ -92,6 +92,8 @@ namespace Rivet
                 return tok_fun;
             if (IdentifierStr == "return")
                 return tok_return;
+            if (IdentifierStr == "import")
+                return tok_import;
 
             // Logical and bitwise
             if (IdentifierStr == "and")
@@ -109,7 +111,7 @@ namespace Rivet
         }
 
         // Number: [0-9]+
-        if(isdigit(LastChar))
+        if (isdigit(LastChar))
         {
             std::string NumStr;
             do
@@ -123,25 +125,28 @@ namespace Rivet
         }
 
         // Operators and punctuation
-        if (LastChar == '='){
-            if(inputFile.peek() == '='){
+        if (LastChar == '=')
+        {
+            if (inputFile.peek() == '=')
+            {
                 advanceChar();
                 advanceChar();
                 return tok_eq;
             }
         }
 
-        if(LastChar == '!'){
-            if(inputFile.peek() == '='){
+        if (LastChar == '!')
+        {
+            if (inputFile.peek() == '=')
+            {
                 advanceChar();
                 advanceChar();
                 return tok_neq;
             }
         }
 
-        if(LastChar == EOF)
+        if (LastChar == EOF)
             return tok_eof;
-
 
         // Otherwise, just return the character as its ascii value
         int ThisChar = LastChar;

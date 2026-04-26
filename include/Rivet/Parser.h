@@ -5,6 +5,7 @@
 #include "AST.h"
 #include <memory>
 #include <vector>
+#include <set>
 
 namespace Rivet
 {
@@ -14,6 +15,7 @@ namespace Rivet
         Parser(Lexer& lexer);
         std::vector<std::unique_ptr<ASTNode>> ParseFile();
         int ErrorCount = 0;
+        inline static std::set<std::string> AlreadyImported;
 
     private:
         Lexer& lexer;
@@ -40,6 +42,7 @@ namespace Rivet
         std::unique_ptr<ASTNode> ParseWhileStatement();
         std::unique_ptr<ASTNode> ParseBlock();
         std::unique_ptr<ASTNode> ParseVariableDeclaration();
+        std::unique_ptr<ASTNode> ParseImport();
         
         int GetTokPrecedence();
     };

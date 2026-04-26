@@ -1,5 +1,6 @@
 #include "Rivet/Parser.h"
 #include <iostream>
+#include <filesystem>
 
 namespace Rivet
 {
@@ -192,11 +193,13 @@ namespace Rivet
 
     std::unique_ptr<ASTNode> Parser::ParseStatement()
     {
+        if (CurTok == tok_import)
+            return ParseImport();
         if (CurTok == tok_int)
             return ParseVariableDeclaration();
         if (CurTok == tok_if)
             return ParseIfStatement();
-        if (CurTok == tok_while)  
+        if (CurTok == tok_while)
             return ParseWhileStatement();
         if (CurTok == '{')
             return ParseBlock();
@@ -332,5 +335,51 @@ namespace Rivet
             return LogErrorExpected("';'", "after variable declaration");
         getNextToken();
         return std::make_unique<VariableDeclAST>("int", varName, std::move(initVal));
+    }
+
+    std::unique_ptr<ASTNode> Parser::ParseImport()
+    {
+        if (CurTok != tok_import)
+            return LogErrorExpected("import", "to start import statement");
+
+        getNextToken();
+        if (CurTok != tok_identifier)
+            return LogErrorExpected("module name", "after 'import'");
+
+        std::string moduleName = lexer.IdentifierStr;
+        getNextToken();
+        if (CurTok != ';')
+            return LogErrorExpected("';'", "after import statement");
+        getNextToken();
+        // To avoid duplicate imports
+        if (AlreadyImported.count(moduleName))
+        {
+            return std::make_unique<ImportAST>(moduleName, std::vector<std::unique_ptr<ASTNode>>{});
+        }
+        AlreadyImported.insert(moduleName);
+
+        std::string importPath = "lib/" + moduleName + ".rvt"; 
+        
+        // This fallback is done so that the compiler could pick up the file whether rivet is executed from the repo root or from the build directory.
+        if (!std::filesystem::exists(importPath))
+        {
+            const std::string fallbackPath = "../lib/" + moduleName + ".rvt";
+            if (std::filesystem::exists(fallbackPath))
+            {
+                importPath = fallbackPath;
+            }
+        }
+
+        Lexer importLexer(importPath);
+        Parser importParser(importLexer);
+
+        std::cout << "Injecting source from module:" << moduleName << std::endl;
+        auto importedAST = importParser.ParseFile();
+
+        if (importParser.ErrorCount > 0)
+        {
+            return LogError("Failed to import module.");
+        }
+        return std::make_unique<ImportAST>(moduleName, std::move(importedAST));
     }
 }

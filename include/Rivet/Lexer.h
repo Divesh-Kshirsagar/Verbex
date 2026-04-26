@@ -36,7 +36,8 @@ namespace Rivet
         tok_else = -31,
         tok_while = -32,
         tok_fun = -33,
-        tok_return = -34
+        tok_return = -34,
+        tok_import = -35
     };
 
     class Lexer

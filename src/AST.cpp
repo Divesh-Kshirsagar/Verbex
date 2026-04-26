@@ -4,7 +4,6 @@
 #include <iostream>
 #include <llvm/IR/Constant.h>
 
-
 namespace Rivet
 {
     void NumberAST::dump(int indent) const
@@ -125,17 +124,19 @@ namespace Rivet
             llvm::Value *CmpGT = CompilerState.Builder->CreateICmpSGT(L, R, "gttmp");
             return CompilerState.Builder->CreateZExt(CmpGT, llvm::Type::getInt32Ty(*CompilerState.TheContext), "booltmp");
         }
-        
+
         // assignment
         case '=':
         {
             auto *LHSE = dynamic_cast<VariableAST *>(LHS.get());
-            if(!LHSE){
+            if (!LHSE)
+            {
                 std::cerr << "Left-hand side of assignment must be a variable." << std::endl;
                 return nullptr;
             }
             llvm::AllocaInst *Alloca = CompilerState.NamedValues[LHSE->getName()];
-            if(!Alloca){
+            if (!Alloca)
+            {
                 std::cerr << "Unknown variable name in assignment: " << LHSE->getName() << std::endl;
                 return nullptr;
             }
@@ -173,14 +174,16 @@ namespace Rivet
     llvm::Value *BlockAST::codegen()
     {
         llvm::Value *LastVal = nullptr;
-        for(const auto &stmt : Statements){
+        for (const auto &stmt : Statements)
+        {
             LastVal = stmt->codegen();
-            if(!LastVal){
+            if (!LastVal)
+            {
                 return nullptr;
             }
-
         }
-        if(LastVal) return LastVal;
+        if (LastVal)
+            return LastVal;
         return llvm::ConstantInt::get(*CompilerState.TheContext, llvm::APInt(32, 0, true));
     }
 
@@ -204,7 +207,8 @@ namespace Rivet
     llvm::Value *IfAST::codegen()
     {
         llvm::Value *CondV = Cond->codegen();
-        if(!CondV){
+        if (!CondV)
+        {
             return nullptr;
         }
 
@@ -221,23 +225,25 @@ namespace Rivet
 
         CompilerState.Builder->SetInsertPoint(ThenBB);
         llvm::Value *ThenV = Then->codegen();
-        if(!ThenV) return nullptr;
+        if (!ThenV)
+            return nullptr;
         CompilerState.Builder->CreateBr(MergeBB);
         ThenBB = CompilerState.Builder->GetInsertBlock();
 
         CompilerState.Builder->SetInsertPoint(ElseBB);
         llvm::Value *ElseV = nullptr;
-        if(Else){
+        if (Else)
+        {
             ElseV = Else->codegen();
-            if(!ElseV) return nullptr;
+            if (!ElseV)
+                return nullptr;
         }
         CompilerState.Builder->CreateBr(MergeBB);
         ElseBB = CompilerState.Builder->GetInsertBlock();
 
         CompilerState.Builder->SetInsertPoint(MergeBB);
 
-        return llvm::ConstantInt::get(*CompilerState.TheContext, llvm::APInt(32, 0, true)); 
-
+        return llvm::ConstantInt::get(*CompilerState.TheContext, llvm::APInt(32, 0, true));
     }
 
     void WhileAST::dump(int indent) const
@@ -263,16 +269,18 @@ namespace Rivet
         CompilerState.Builder->SetInsertPoint(CondBB);
 
         llvm::Value *CondV = Cond->codegen();
-        if(!CondV) return nullptr;
+        if (!CondV)
+            return nullptr;
 
-        llvm::Value *Zero=llvm::ConstantInt::get(*CompilerState.TheContext, llvm::APInt(32, 0, true));
+        llvm::Value *Zero = llvm::ConstantInt::get(*CompilerState.TheContext, llvm::APInt(32, 0, true));
         llvm::Value *CondBool = CompilerState.Builder->CreateICmpNE(CondV, Zero, "loopcond");
 
         CompilerState.Builder->CreateCondBr(CondBool, LoopBB, AfterBB);
 
         CompilerState.Builder->SetInsertPoint(LoopBB);
         llvm::Value *BodyV = Body->codegen();
-        if(!BodyV) return nullptr;
+        if (!BodyV)
+            return nullptr;
         CompilerState.Builder->CreateBr(CondBB);
         CompilerState.Builder->SetInsertPoint(AfterBB);
         return llvm::ConstantInt::get(*CompilerState.TheContext, llvm::APInt(32, 0, true));
@@ -289,6 +297,47 @@ namespace Rivet
     }
     llvm::Value *CallAST::codegen()
     {
-        return nullptr; // TODO: Implement codegen
+        llvm::Function *CalleeF = CompilerState.TheModule->getFunction(Callee);
+        if (!CalleeF)
+        {
+            std::cerr << "Unknown function referenced: " << Callee << std::endl;
+            return nullptr;
+        }
+
+        if (CalleeF->arg_size() != Args.size())
+        {
+            std::cerr << "Incorrect number of arguments passed to function: " << Callee << std::endl;
+            return nullptr;
+        }
+
+        std::vector<llvm::Value *> ArgsV;
+        for (unsigned i = 0, e = Args.size(); i != e; ++i)
+        {
+            llvm::Value *ArgV = Args[i]->codegen();
+            if (!ArgV)
+                return nullptr;
+            ArgsV.push_back(ArgV);
+        }
+
+        return CompilerState.Builder->CreateCall(CalleeF, ArgsV, "calltmp");
+    }
+
+    void ImportAST::dump(int indent) const
+    {
+        printIndent(indent);
+        std::cout << "Import: " << ModuleName << std::endl;
+    }
+    llvm::Value *ImportAST::codegen()
+    {
+        for (const auto &Node : ImportedNodes)
+        {
+            if (!Node->codegen())
+            {
+                std::cerr << "Failed to generate IR for imprted module." << ModuleName << std::endl;
+                return nullptr;
+            }
+        }
+
+        return llvm::ConstantInt::get(*CompilerState.TheContext, llvm::APInt(32, 0, true));
     }
 }
