@@ -3,11 +3,20 @@
 // Target: LLVM IR -> ARM Cortex-M0 (Bare-Metal)
 // ============================================================================
 
-<program> ::= <declaration_list>
+<program> ::= <top_level_list>
+
+<top_level_list> ::= { <top_level_item> }
+
+<top_level_item> ::= <import_statement>
+                   | <declaration>
+                   | <statement>
 
 <declaration_list> ::= <declaration> { <declaration> }
 
 <declaration> ::= <variable_declaration> | <function_declaration>
+
+// --- Modules ---
+<import_statement> ::= "import" <identifier> ";"
 
 // --- Types & Variables ---
 <type_specifier> ::= "int" | "int" "ref" | "void"
